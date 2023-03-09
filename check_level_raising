@@ -1,0 +1,88 @@
+def check_level_raising(form, form_lr, prime, l, field=[]):
+
+ # Compute the Sturm bound for the forms
+    bound_form = form.parent().sturm_bound()
+    bound_lr = form_lr.parent().sturm_bound()
+    bound = max(bound_form,bound_lr)
+# Extract the level of the forms
+    level = form.level()
+    level_lr = form_lr.level()
+# Initialize primes
+    P = Primes(); 
+ 
+    if field!=[]:
+        
+        d=field.absolute_discriminant()
+
+        if (kronecker(d,prime) == 0) | (Mod(level,prime)==0): 
+             
+            return False
+         
+        else:
+
+            if (((Mod(form.coefficient(l) - (l+1),prime)==0) | (Mod(form.coefficient(l) + (l+1),prime)==0))): 
+                
+                flag_g=False
+                
+                j=0 
+                g=form_lr 
+                field_g=g.base_ring()
+#                print(field_g)
+#                ring_of_integers=field_g.maximal_order()
+                LL = field_g.ideal(prime)
+#                print("Prime p in the field of the level raising")
+#                print(LL)
+                if LL.is_principal():
+                    L_factors = LL;
+                else:
+                    L_factors = LL.factor();
+#                print(L_factors)
+                
+                for k in IntegerRange(len(L_factors)):
+                    
+                    if field_g is QQ: 
+                        L = LL;
+                    else:
+                        L = L_factors[k][0];
+
+                    FLAG=True
+                    while FLAG : 
+                        j=j+1 
+                        pp=P.unrank(j)
+                        if (pp<bound+1) & (Mod(l*level,pp)!=0): 
+                            II = field_g.ideal(g.coefficient(pp)-form.coefficient(pp));
+#                            print("Coeffs (diff, g=lr, f)")                        
+                            diff=g.coefficient(pp)-form.coefficient(pp)
+#                            print(diff)
+#                            print(g.coefficient(pp))
+#                            print(form.coefficient(pp))
+#                            print("diff in (p)?")
+#                            print(diff in L)
+#                            print("II")                        
+#                            print(II)
+
+                            if (diff in L):
+                                flag_g=True  
+                            else:
+                                flag_g=False 
+                                FLAG = False
+                                #print([L, g, flag_g])
+                                #return False       
+
+                        else: 
+                            FLAG=False
+                            flag_g=True
+                    
+                    if flag_g:
+                        return [flag_g, L]
+                    
+                if flag_g:
+                    return "ERROR"
+                else:
+                     return [flag_g, NaN]
+    else:
+
+        print("Specify field.")
+
+
+###
