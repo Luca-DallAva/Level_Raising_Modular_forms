@@ -1,4 +1,4 @@
-def check_level_raising(form, form_lr, prime, l, field=[]):
+def inner_procedure_check(form, form_lr, prime, l, Prime=[]):
 
  # Compute the Sturm bound for the forms
     bound_form = form.parent().sturm_bound()
@@ -8,81 +8,194 @@ def check_level_raising(form, form_lr, prime, l, field=[]):
     level = form.level()
     level_lr = form_lr.level()
 # Initialize primes
-    P = Primes(); 
- 
-    if field!=[]:
+    PRIMES = Primes(); 
+    
+    field_f = form.base_ring()
+    field_g = form_lr.base_ring()
+    
+    if Prime==[]:
         
-        d=field.absolute_discriminant()
-
-        if (kronecker(d,prime) == 0) | (Mod(level,prime)==0): 
-             
-            return False
-         
+        if field_f == QQ:
+            
+            P = prime
+            
+            inner_procedure_check(form, form_lr, prime, l, P)
+            
         else:
+            PP = field_f.ideal(prime)
+            
+            if PP.is_principal():
 
-            if (((Mod(form.coefficient(l) - (l+1),prime)==0) | (Mod(form.coefficient(l) + (l+1),prime)==0))): 
+                P = PP;
+
+                inner_procedure_check(form, form_lr, prime, l, P)
+
+            else:
+
+                PP_factors = PP.prime_factors();
+
+                for k in IntegerRange(len(PP_factors)):
+
+                    P = PP_factors[k];
+
+                    inner_procedure_check(form, form_lr, prime, l, P)
+
+        
+    else:
+        
+        if field_g == QQ:
+            
+            Prime_g = Prime
+
+            flag_g=False
+            
+            j=0 
+            FLAG=True
+            
+            while FLAG : 
+                j=j+1 
+                pp=PRIMES.unrank(j)
+                if (pp<bound+1) & (Mod(l*level,pp)!=0):            
+                    diff=form_lr.coefficient(pp)-form.coefficient(pp)
+                    if (diff in PPrime_g):
+                        flag_g=True  
+                    else:
+                        flag_g=False 
+                        FLAG = False     
+
+                else: 
+                    FLAG=False
+                    
+            if flag_g:
+                return [flag_g, PPrime_g]
+
+            else:
+                return [flag_g, NaN]
+        
+        else:
+            
+            Prime_g = field_g.ideal(Prime)
+            
+            Prime_g_factors = Prime_g.prime_factors();
+            
+            v=[];
+            
+            for k in IntegerRange(len(Prime_g_factors)):
+
+                PPrime_g = Prime_g_factors[k];
                 
                 flag_g=False
                 
                 j=0 
-                g=form_lr 
-                field_g=g.base_ring()
-#                print(field_g)
-#                ring_of_integers=field_g.maximal_order()
-                LL = field_g.ideal(prime)
-#                print("Prime p in the field of the level raising")
-#                print(LL)
-                if LL.is_principal():
-                    L_factors = LL;
-                else:
-                    L_factors = LL.factor();
-#                print(L_factors)
-                
-                for k in IntegerRange(len(L_factors)):
-                    
-                    if field_g is QQ: 
-                        L = LL;
-                    else:
-                        L = L_factors[k][0];
+                FLAG=True
+                while FLAG : 
+                    j=j+1 
+                    pp=PRIMES.unrank(j)
+                    if (pp<bound+1) & (Mod(l*level,pp)!=0):            
+                        diff=form_lr.coefficient(pp)-form.coefficient(pp)
+                        if (diff in PPrime_g):
+                            flag_g=True  
+                        else:
+                            flag_g=False 
+                            FLAG = False    
 
-                    FLAG=True
-                    while FLAG : 
-                        j=j+1 
-                        pp=P.unrank(j)
-                        if (pp<bound+1) & (Mod(l*level,pp)!=0): 
-                            II = field_g.ideal(g.coefficient(pp)-form.coefficient(pp));
-#                            print("Coeffs (diff, g=lr, f)")                        
-                            diff=g.coefficient(pp)-form.coefficient(pp)
-#                            print(diff)
-#                            print(g.coefficient(pp))
-#                            print(form.coefficient(pp))
-#                            print("diff in (p)?")
-#                            print(diff in L)
-#                            print("II")                        
-#                            print(II)
+                    else: 
+                        FLAG=False
 
-                            if (diff in L):
-                                flag_g=True  
-                            else:
-                                flag_g=False 
-                                FLAG = False
-                                #print([L, g, flag_g])
-                                #return False       
 
-                        else: 
-                            FLAG=False
-                            flag_g=True
-                    
-                    if flag_g:
-                        return [flag_g, L]
-                    
                 if flag_g:
-                    return "ERROR"
+                    v = v + [[flag_g, PPrime_g]];
+
+            if len(v)==0:
+                
+                return [False, NaN]
+            elif len(v)==1:
+                return v[0]
+            else: 
+                
+                return v
+
+
+##################################################################################        
+
+def check_level_raising(form, form_lr, prime, l):
+
+# Extract the level, weight and character of the form
+    level = form.level()
+    wt = form.weight()
+    chi = form.character()
+
+#First check: 
+#see Torti - On the level raising of cuspidal eigenforms modulo prime powers, Theorem 1.1 by Ribet, Diamond.
+
+    M = (euler_phi(level)*level*(factorial(wt-2)))/2
+
+        
+    if((prime == l) or (Mod(level,prime)==0) or (Mod(level,l)==0)): #what if l divides the level?
+        
+        return [False, NaN]
+
+    elif(Mod(M,prime)!=0):
+       
+        MM = form.coefficient(l)^2 - (chi(l)*l^(wt-2)*(l+1)^2)
+
+        field_f = form.base_ring()
+
+        if field_f == QQ:
+            
+            if(Mod(MM,prime)==0):
+                
+                return inner_procedure_check(form, form_lr, prime, l, prime)
+
+            else:
+                
+                return [False, NaN]
+
+
+        else:
+            
+            pp = field_f.ideal(prime)
+
+            if pp.is_principal():
+
+                P = pp;
+
+                if(MM in P):
+                    
+                    return inner_procedure_check(form, form_lr, prime, l, P) #FIX IT! One has to deal with P generic, not P a prime in ZZ
+
                 else:
-                     return [flag_g, NaN]
+                    
+                    return [False, NaN]
+
+
+            else:
+
+                pp_factors = pp.prime_factors();
+
+                v=[];
+                
+                for k in IntegerRange(len(pp_factors)):
+
+                    P = pp_factors[k];
+                    
+                    
+                    if(MM in P):
+
+                        v = v + [P+[inner_procedure_check(form, form_lr, prime, l, P)]]
+
+                if len(v)==0:
+                    
+                    return [P,False, NaN]
+                
+                else:
+                
+                    return v
+
     else:
-
-        print("Specify field.")
-
-
+        
+        if field_f == QQ:
+            return inner_procedure_check(form, form_lr, prime, l, prime)
+        else:
+            return "Still to be implemented"
 ###
