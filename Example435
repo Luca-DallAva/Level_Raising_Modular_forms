@@ -1,15 +1,18 @@
+### In the present example we can see that the forms we see are newforms, 
+### but there must be a form which is new only at l=29 realising a few examples. 
+
+
 print("---------------STARTING-FORM----------------------------------")
 f = Newform('15a', names='a')
 FORMS = Newforms(435, names='a')
-field = NumberField(x^2 -x -1, 'x')
 prime = 7
 l = 29
 print(f)
 for g in FORMS:
     print("---------------CHECK-LEVEL-RAISING-WITH-----------------------")
-    print(g)
+    print([g,g.base_ring()])
     print("---------------RESULT-AND-PRIME-------------------------------")
-    print(check_level_raising(f,g,prime,l,field))
+    print(check_level_raising(f,g,prime,l))
     
     
 
@@ -19,42 +22,42 @@ OUTPUT:
 ---------------STARTING-FORM----------------------------------
 q - q^2 - q^3 - q^4 + q^5 + O(q^6)
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q - q^2 + q^3 - q^4 + q^5 + O(q^6)
+[q - q^2 + q^3 - q^4 + q^5 + O(q^6), Rational Field]
 ---------------RESULT-AND-PRIME-------------------------------
 [False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q - q^3 - 2*q^4 - q^5 + O(q^6)
+[q - q^3 - 2*q^4 - q^5 + O(q^6), Rational Field]
 ---------------RESULT-AND-PRIME-------------------------------
 [False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + q^3 - 2*q^4 - q^5 + O(q^6)
+[q + q^3 - 2*q^4 - q^5 + O(q^6), Rational Field]
 ---------------RESULT-AND-PRIME-------------------------------
 [False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + q^2 + q^3 - q^4 + q^5 + O(q^6)
+[q + q^2 + q^3 - q^4 + q^5 + O(q^6), Rational Field]
 ---------------RESULT-AND-PRIME-------------------------------
 [False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + a4*q^2 + q^3 + (-a4 - 1)*q^4 - q^5 + O(q^6)
+[q + a4*q^2 + q^3 + (-a4 - 1)*q^4 - q^5 + O(q^6), Number Field in a4 with defining polynomial x^2 + x - 1]
 ---------------RESULT-AND-PRIME-------------------------------
-[True, Fractional ideal (7)]
+[False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + a5*q^2 + q^3 + (-a5 + 3)*q^4 + q^5 + O(q^6)
+[q + a5*q^2 + q^3 + (-a5 + 3)*q^4 + q^5 + O(q^6), Number Field in a5 with defining polynomial x^2 + x - 5]
 ---------------RESULT-AND-PRIME-------------------------------
-[True, Fractional ideal (a5 + 4)]
+[False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + a6*q^2 + q^3 + 3*q^4 - q^5 + O(q^6)
+[q + a6*q^2 + q^3 + 3*q^4 - q^5 + O(q^6), Number Field in a6 with defining polynomial x^2 - 5]
 ---------------RESULT-AND-PRIME-------------------------------
-[True, Fractional ideal (7)]
+[False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + a7*q^2 + q^3 + (a7 + 2)*q^4 + q^5 + O(q^6)
+[q + a7*q^2 + q^3 + (a7 + 2)*q^4 + q^5 + O(q^6), Number Field in a7 with defining polynomial x^2 - x - 4]
 ---------------RESULT-AND-PRIME-------------------------------
-[True, Fractional ideal (7)]
+[False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + a8*q^2 - q^3 + (a8^2 - 2)*q^4 + q^5 + O(q^6)
+[q + a8*q^2 - q^3 + (a8^2 - 2)*q^4 + q^5 + O(q^6), Number Field in a8 with defining polynomial x^3 - x^2 - 5*x + 4]
 ---------------RESULT-AND-PRIME-------------------------------
-[True, Fractional ideal (-a8 - 1)]
+[False, NaN]
 ---------------CHECK-LEVEL-RAISING-WITH-----------------------
-q + a9*q^2 - q^3 + (a9^2 - 2)*q^4 - q^5 + O(q^6)
+[q + a9*q^2 - q^3 + (a9^2 - 2)*q^4 - q^5 + O(q^6), Number Field in a9 with defining polynomial x^4 + 3*x^3 - 2*x^2 - 7*x + 1]
 ---------------RESULT-AND-PRIME-------------------------------
-[True, Fractional ideal (7)]
+[False, NaN]
