@@ -1,0 +1,7 @@
+We report here a few known issues that, at the present, we do not know how to handle.
+
+1) The level raising s between two forms, f and g, where g has to be new only at l. At the moment it seems rather difficult to find the precise form which is the level-raising of f if g is not new.
+
+2) I still have to implement the case of f with coefficients in a number field; it shouldn't be too hard, but it is annoying.
+
+3) Clearly, the algorithm is the stupid one, there is no innovation here. In particular, it is rather demanding on computation time and resources.
