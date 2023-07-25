@@ -57,7 +57,7 @@ def inner_procedure_check(form, form_lr, prime, l, Prime=[]):
                 pp=PRIMES.unrank(j)
                 if (pp<bound+1) & (Mod(l*level,pp)!=0):            
                     diff=form_lr.coefficient(pp)-form.coefficient(pp)
-                    if (diff in PPrime_g):
+                    if (Mod(diff,Prime_g)==0):
                         flag_g=True  
                     else:
                         flag_g=False 
@@ -67,7 +67,7 @@ def inner_procedure_check(form, form_lr, prime, l, Prime=[]):
                     FLAG=False
                     
             if flag_g:
-                return [flag_g, PPrime_g]
+                return [flag_g, Prime_g*ZZ]
 
             else:
                 return [flag_g, NaN]
@@ -130,6 +130,7 @@ def check_level_raising(form, form_lr, prime, l):
 
     M = (euler_phi(level)*level*(factorial(wt-2)))/2
 
+    field_f = form.base_ring()
         
     if((prime == l) or (Mod(level,prime)==0) or (Mod(level,l)==0)): #what if l divides the level?
         
@@ -139,7 +140,6 @@ def check_level_raising(form, form_lr, prime, l):
        
         MM = form.coefficient(l)^2 - (chi(l)*l^(wt-2)*(l+1)^2)
 
-        field_f = form.base_ring()
 
         if field_f == QQ:
             
