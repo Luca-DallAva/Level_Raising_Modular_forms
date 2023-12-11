@@ -4,4 +4,4 @@ We report here a few known issues that, at the present, we do not know how to ha
 
 2) I still have to implement the case of f with coefficients in a number field; it shouldn't be too hard, but it is annoying.
 
-3) Clearly, the algorithm is the stupid one, there is no innovation here. In particular, it is rather demanding on computation time and resources.
+3) Clearly, the algorithm is the stupid one, there is no innovation here. In particular, it is rather demanding on computational time and resources.
